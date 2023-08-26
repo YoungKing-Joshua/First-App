@@ -32,6 +32,17 @@ class MyAppState extends ChangeNotifier {
     current = WordPair.random();
     notifyListeners();
   }
+
+  var favorites = <WordPair>[];
+
+  void toggleFavorite() {
+    if (favorites.contains(current)) {
+      favorites.remove(current);
+    } else {
+      favorites.add(current);
+    }
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -41,21 +52,32 @@ class MyHomePage extends StatelessWidget {
     var pair = appState.current;
 
     return Scaffold(
-      body: Center(
-        child: Column(
+        body: Center(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           BigCard(pair: pair),
           SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              appState.getNext();
-            },
-            child: Text('Next'),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  appState.getNext();
+                },
+                child: Text('Next'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  ;
+                },
+                child: Text('Like'),
+              ),
+            ],
           ),
         ],
-      ),)
-    );
+      ),
+    ));
   }
 }
 
@@ -78,11 +100,8 @@ class BigCard extends StatelessWidget {
       color: theme.colorScheme.primary,
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Text(
-          pair.asLowerCase,
-          style: style,
-          semanticsLabel: pair.asPascalCase
-        ),
+        child: Text(pair.asLowerCase,
+            style: style, semanticsLabel: pair.asPascalCase),
       ),
     );
   }
